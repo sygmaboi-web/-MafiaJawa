@@ -1,96 +1,74 @@
-let keranjang = [];
-let total = 0;
+// Data stok awal
+let stok = {
+  corndogKecil: 20,
+  corndogBesar: 20,
+  redPoison: 20
+};
 
-let rekap = { kecil: 0, besar: 0, toxic: 0, total: 0 };
+// Data hasil penjualan
+let penjualan = [];
 
-function showPage(page) {
-  document.querySelectorAll('.page').forEach(p => p.classList.add('hidden'));
-  document.getElementById(page).classList.remove('hidden');
+// Password
+const PASSWORD = "KELOMPOK1KEREN";
+
+// Fungsi tampilkan section
+function showSection(id) {
+  document.querySelectorAll('.section').forEach(sec => sec.classList.remove('active'));
+  document.getElementById(id).classList.add('active');
 }
 
-function authKasir() {
+// Akses kasir
+function aksesKasir() {
   let pass = prompt("Masukkan Password:");
-  if (pass === "KELOMPOK1KEREN") {
-    showPage('kasir');
+  if (pass === PASSWORD) {
+    showSection('kasir');
+    loadKasir();
   } else {
     alert("Password salah!");
   }
 }
 
-function authKasirHasil() {
+// Akses hasil penjualan
+function aksesPenjualan() {
   let pass = prompt("Masukkan Password:");
-  if (pass === "KELOMPOK1KEREN") {
-    showPage('hasil');
-    updateRekap();
+  if (pass === PASSWORD) {
+    showSection('penjualan');
+    loadPenjualan();
   } else {
     alert("Password salah!");
   }
 }
 
-function tambahPenjualan() {
-  let produk = document.getElementById("produk").value;
-  let jumlah = parseInt(document.getElementById("jumlah").value);
-
-  let namaProduk, harga;
-  if (produk === "kecil") { namaProduk = "Corndog Kecil"; harga = 4000; }
-  if (produk === "besar") { namaProduk = "Corndog Besar"; harga = 7000; }
-  if (produk === "toxic") { namaProduk = "Toxic Red"; harga = 4000; }
-
-  keranjang.push({ nama: namaProduk, harga: harga, jumlah: jumlah });
-  total += harga * jumlah;
-
-  tampilkanKeranjang();
+// Isi konten kasir
+function loadKasir() {
+  let kasirDiv = document.getElementById("kasirContent");
+  kasirDiv.innerHTML = `
+    <h3>Pilih Produk</h3>
+    <div class="kasir-grid">
+      <button onclick="beli('Corndog Kecil', 4000, 'corndogKecil')">Corndog Kecil - Rp4.000</button>
+      <button onclick="beli('Corndog Besar', 7000, 'corndogBesar')">Corndog Besar - Rp7.000</button>
+      <button onclick="beli('Red Poison', 4000, 'redPoison')">Red Poison - Rp4.000</button>
+    </div>
+    <h3>Stok Saat Ini</h3>
+    <ul>
+      <li>Corndog Kecil: ${stok.corndogKecil}</li>
+      <li>Corndog Besar: ${stok.corndogBesar}</li>
+      <li>Red Poison: ${stok.redPoison}</li>
+    </ul>
+    <div id="struk"></div>
+  `;
 }
 
-function tampilkanKeranjang() {
-  let list = document.getElementById("keranjang");
-  list.innerHTML = "";
-  keranjang.forEach(item => {
-    let li = document.createElement("li");
-    li.textContent = `${item.nama} x${item.jumlah} = Rp${item.harga * item.jumlah}`;
-    list.appendChild(li);
-  });
-  document.getElementById("total").textContent = total;
-}
+// Proses pembelian
+function beli(nama, harga, key) {
+  if (stok[key] > 0) {
+    stok[key]--;
+    let transaksi = {
+      produk: nama,
+      harga: harga,
+      waktu: new Date().toLocaleString()
+    };
+    penjualan.push(transaksi);
 
-function checkout() {
-  if (keranjang.length === 0) {
-    alert("Keranjang kosong!");
-    return;
-  }
-
-  keranjang.forEach(item => {
-    if (item.nama === "Corndog Kecil") rekap.kecil += item.jumlah;
-    if (item.nama === "Corndog Besar") rekap.besar += item.jumlah;
-    if (item.nama === "Toxic Red") rekap.toxic += item.jumlah;
-  });
-  rekap.total += total;
-
-  let pembayaran = document.querySelector('input[name="bayar"]:checked').value;
-  let strukBox = document.getElementById("struk");
-  strukBox.classList.remove("hidden");
-  strukBox.innerHTML = `<h4>Struk Pembelian</h4>
-    ${keranjang.map(i => `<p>${i.nama} x${i.jumlah} = Rp${i.harga * i.jumlah}</p>`).join("")}
-    <p><b>Total: Rp${total}</b></p>
-    <p>Pembayaran: ${pembayaran}</p>
-    <p>Terima kasih sudah membeli di Mafia Jawa!</p>`;
-
-  keranjang = [];
-  total = 0;
-  tampilkanKeranjang();
-  document.getElementById("total").textContent = "0";
-}
-
-function updateRekap() {
-  document.getElementById("rekapKecil").textContent = rekap.kecil;
-  document.getElementById("rekapBesar").textContent = rekap.besar;
-  document.getElementById("rekapToxic").textContent = rekap.toxic;
-  document.getElementById("rekapTotal").textContent = rekap.total;
-}
-
-// QRIS toggle
-document.querySelectorAll('input[name="bayar"]').forEach(r => {
-  r.addEventListener('change', () => {
-    document.getElementById("qrisBox").classList.toggle("hidden", r.value !== "QRIS" || !r.checked);
-  });
-});
+    // Tampilkan struk
+    document.getElementById("struk").inn
