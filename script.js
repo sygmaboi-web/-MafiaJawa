@@ -1,61 +1,84 @@
-function showPage(pageId) {
-  document.querySelectorAll('.page').forEach(page => page.classList.remove('active'));
-  document.getElementById(pageId).classList.add('active');
-}
-
-// Data penjualan
-let sales = {
-  "Big Boss": { price: 7000, sold: 0 },
-  "Small Boss": { price: 4000, sold: 0 },
-  "Red Poison": { price: 4000, sold: 0 }
+let stok = {
+  "Big Boss": 20,
+  "Small Boss": 30,
+  "Red Poison": 25
 };
 
-document.getElementById('kasirForm').addEventListener('submit', function(e) {
+let harga = {
+  "Big Boss": 7000,
+  "Small Boss": 4000,
+  "Red Poison": 4000
+};
+
+let penjualan = [];
+
+function showPage(id) {
+  document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+  document.getElementById(id).classList.add('active');
+}
+
+function passwordPrompt(page) {
+  let pass = prompt("Masukkan password untuk membuka halaman ini:");
+  if (pass === "KELOMPOK1KEREN") {
+    showPage(page);
+  } else {
+    alert("Password salah!");
+  }
+}
+
+// Kasir
+document.getElementById("kasirForm").addEventListener("submit", function(e) {
   e.preventDefault();
-  
-  let produk = document.getElementById('produk').value;
-  let jumlah = parseInt(document.getElementById('jumlah').value);
-  let total = sales[produk].price * jumlah;
-  
-  // Update data
-  sales[produk].sold += jumlah;
-  
-  // Generate struk
-  let strukId = Math.floor(Math.random() * 100000);
-  let struk = `
+  let produk = document.getElementById("produk").value;
+  let jumlah = parseInt(document.getElementById("jumlah").value);
+
+  if (stok[produk] < jumlah) {
+    alert("Stok " + produk + " tidak cukup!");
+    return;
+  }
+
+  stok[produk] -= jumlah;
+  let total = harga[produk] * jumlah;
+
+  let transaksi = {
+    produk: produk,
+    jumlah: jumlah,
+    total: total,
+    waktu: new Date().toLocaleString()
+  };
+  penjualan.push(transaksi);
+
+  // Tampilkan struk
+  let strukHTML = `
     <div class="struk">
-      <h3>Struk Mafia Jawa</h3>
-      <p>No Struk: #${strukId}</p>
+      <h3>Struk Pembelian - Mafia Jawa</h3>
       <p>Produk: ${produk}</p>
       <p>Jumlah: ${jumlah}</p>
-      <p>Total: Rp${total.toLocaleString()}</p>
-      <p>Terima kasih sudah berbelanja 🙏</p>
+      <p>Total: Rp${total}</p>
+      <p>Waktu: ${transaksi.waktu}</p>
+      <p>Terima kasih telah membeli di Mafia Jawa 🍴</p>
     </div>
   `;
-  
-  document.getElementById('strukContainer').innerHTML = struk;
-  
-  updatePenjualan();
+  document.getElementById("strukArea").innerHTML = strukHTML;
+
+  tampilkanDataPenjualan();
 });
 
-function updatePenjualan() {
-  let tbody = document.querySelector('#penjualanTable tbody');
-  tbody.innerHTML = "";
-  let grandTotal = 0;
-  
-  for (let item in sales) {
-    let jumlah = sales[item].sold;
-    let total = jumlah * sales[item].price;
-    grandTotal += total;
-    
-    let row = `<tr>
-      <td>${item}</td>
-      <td>${jumlah}</td>
-      <td>Rp${total.toLocaleString()}</td>
-    </tr>`;
-    tbody.innerHTML += row;
+function tampilkanDataPenjualan() {
+  let list = document.getElementById("dataPenjualan");
+  list.innerHTML = "";
+  penjualan.forEach((p, i) => {
+    let li = document.createElement("li");
+    li.textContent = `${p.waktu} - ${p.produk} x${p.jumlah} = Rp${p.total}`;
+    list.appendChild(li);
+  });
+}
+
+function hapusData() {
+  if (confirm("Yakin ingin menghapus semua data penjualan?")) {
+    penjualan = [];
+    tampilkanDataPenjualan();
+    alert("Data penjualan berhasil dihapus!");
   }
-  
-  document.getElementById('grandTotal').innerText = "Total Penjualan: Rp" + grandTotal.toLocaleString();
 }
 
