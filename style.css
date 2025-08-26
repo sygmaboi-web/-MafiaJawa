@@ -1,0 +1,103 @@
+body {
+  font-family: 'Poppins', sans-serif;
+  margin: 0;
+  background: linear-gradient(135deg, #4facfe, #43e97b);
+  color: #fff;
+  text-align: center;
+}
+
+header {
+  background: #0a3d62;
+  padding: 15px;
+  position: sticky;
+  top: 0;
+}
+
+.title {
+  margin: 0;
+  font-size: 28px;
+  animation: bounce 2s infinite;
+}
+
+nav ul {
+  list-style: none;
+  padding: 0;
+  display: flex;
+  justify-content: center;
+  gap: 20px;
+}
+
+nav a {
+  color: #fff;
+  text-decoration: none;
+  font-weight: bold;
+  transition: transform 0.3s;
+}
+
+nav a:hover {
+  transform: scale(1.2);
+  color: #ffeaa7;
+}
+
+.page {
+  padding: 20px;
+}
+
+.hidden {
+  display: none;
+}
+
+.gallery img {
+  width: 180px;
+  margin: 10px;
+  border-radius: 15px;
+  box-shadow: 0px 4px 12px rgba(0,0,0,0.4);
+  transition: transform 0.3s;
+}
+
+.gallery img:hover {
+  transform: rotate(5deg) scale(1.05);
+}
+
+button {
+  background: #0984e3;
+  color: white;
+  border: none;
+  padding: 10px 20px;
+  margin: 10px;
+  border-radius: 12px;
+  cursor: pointer;
+  transition: background 0.3s, transform 0.3s;
+}
+
+button:hover {
+  background: #00b894;
+  transform: scale(1.1);
+}
+
+.qris-img {
+  width: 200px;
+  margin-top: 10px;
+}
+
+.struk {
+  background: #fff;
+  color: #000;
+  margin: 20px auto;
+  padding: 15px;
+  width: 250px;
+  border-radius: 12px;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.3);
+  animation: fadeIn 1s;
+  text-align: left;
+}
+
+@keyframes bounce {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-10px); }
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
