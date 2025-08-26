@@ -1,74 +1,61 @@
-// Data stok awal
-let stok = {
-  corndogKecil: 20,
-  corndogBesar: 20,
-  redPoison: 20
+function showPage(pageId) {
+  document.querySelectorAll('.page').forEach(page => page.classList.remove('active'));
+  document.getElementById(pageId).classList.add('active');
+}
+
+// Data penjualan
+let sales = {
+  "Big Boss": { price: 7000, sold: 0 },
+  "Small Boss": { price: 4000, sold: 0 },
+  "Red Poison": { price: 4000, sold: 0 }
 };
 
-// Data hasil penjualan
-let penjualan = [];
-
-// Password
-const PASSWORD = "KELOMPOK1KEREN";
-
-// Fungsi tampilkan section
-function showSection(id) {
-  document.querySelectorAll('.section').forEach(sec => sec.classList.remove('active'));
-  document.getElementById(id).classList.add('active');
-}
-
-// Akses kasir
-function aksesKasir() {
-  let pass = prompt("Masukkan Password:");
-  if (pass === PASSWORD) {
-    showSection('kasir');
-    loadKasir();
-  } else {
-    alert("Password salah!");
-  }
-}
-
-// Akses hasil penjualan
-function aksesPenjualan() {
-  let pass = prompt("Masukkan Password:");
-  if (pass === PASSWORD) {
-    showSection('penjualan');
-    loadPenjualan();
-  } else {
-    alert("Password salah!");
-  }
-}
-
-// Isi konten kasir
-function loadKasir() {
-  let kasirDiv = document.getElementById("kasirContent");
-  kasirDiv.innerHTML = `
-    <h3>Pilih Produk</h3>
-    <div class="kasir-grid">
-      <button onclick="beli('Corndog Kecil', 4000, 'corndogKecil')">Corndog Kecil - Rp4.000</button>
-      <button onclick="beli('Corndog Besar', 7000, 'corndogBesar')">Corndog Besar - Rp7.000</button>
-      <button onclick="beli('Red Poison', 4000, 'redPoison')">Red Poison - Rp4.000</button>
+document.getElementById('kasirForm').addEventListener('submit', function(e) {
+  e.preventDefault();
+  
+  let produk = document.getElementById('produk').value;
+  let jumlah = parseInt(document.getElementById('jumlah').value);
+  let total = sales[produk].price * jumlah;
+  
+  // Update data
+  sales[produk].sold += jumlah;
+  
+  // Generate struk
+  let strukId = Math.floor(Math.random() * 100000);
+  let struk = `
+    <div class="struk">
+      <h3>Struk Mafia Jawa</h3>
+      <p>No Struk: #${strukId}</p>
+      <p>Produk: ${produk}</p>
+      <p>Jumlah: ${jumlah}</p>
+      <p>Total: Rp${total.toLocaleString()}</p>
+      <p>Terima kasih sudah berbelanja 🙏</p>
     </div>
-    <h3>Stok Saat Ini</h3>
-    <ul>
-      <li>Corndog Kecil: ${stok.corndogKecil}</li>
-      <li>Corndog Besar: ${stok.corndogBesar}</li>
-      <li>Red Poison: ${stok.redPoison}</li>
-    </ul>
-    <div id="struk"></div>
   `;
+  
+  document.getElementById('strukContainer').innerHTML = struk;
+  
+  updatePenjualan();
+});
+
+function updatePenjualan() {
+  let tbody = document.querySelector('#penjualanTable tbody');
+  tbody.innerHTML = "";
+  let grandTotal = 0;
+  
+  for (let item in sales) {
+    let jumlah = sales[item].sold;
+    let total = jumlah * sales[item].price;
+    grandTotal += total;
+    
+    let row = `<tr>
+      <td>${item}</td>
+      <td>${jumlah}</td>
+      <td>Rp${total.toLocaleString()}</td>
+    </tr>`;
+    tbody.innerHTML += row;
+  }
+  
+  document.getElementById('grandTotal').innerText = "Total Penjualan: Rp" + grandTotal.toLocaleString();
 }
 
-// Proses pembelian
-function beli(nama, harga, key) {
-  if (stok[key] > 0) {
-    stok[key]--;
-    let transaksi = {
-      produk: nama,
-      harga: harga,
-      waktu: new Date().toLocaleString()
-    };
-    penjualan.push(transaksi);
-
-    // Tampilkan struk
-    document.getElementById("struk").inn
