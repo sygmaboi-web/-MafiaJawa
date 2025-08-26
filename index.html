@@ -2,68 +2,75 @@
 <html lang="id">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Mafia Jawa</title>
+  <title>Mafia Jawa - Market Day</title>
   <link rel="stylesheet" href="style.css">
 </head>
 <body>
   <!-- Navbar -->
-  <nav class="navbar">
-    <h1 class="logo">🍴 Mafia Jawa</h1>
-    <ul class="menu">
-      <li><a href="#" onclick="showPage('home')">Makanan</a></li>
-      <li><a href="#" onclick="passwordPrompt('kasir')">Kasir</a></li>
-      <li><a href="#" onclick="passwordPrompt('penjualan')">Data Penjualan</a></li>
+  <nav>
+    <div class="logo">🍴 Mafia Jawa</div>
+    <ul>
+      <li><a href="#" onclick="showPage('home')">Home</a></li>
+      <li><a href="#" onclick="authPage('kasir')">Kasir</a></li>
+      <li><a href="#" onclick="authPage('penjualan')">Data Penjualan</a></li>
     </ul>
   </nav>
 
   <!-- Halaman Utama -->
   <section id="home" class="page active">
-    <h2>Menu Andalan Kami</h2>
-    <div class="products">
-      <div class="card">
+    <h1>Selamat Datang di Mafia Jawa</h1>
+    <p>Camilan enak buatan siswa SMP Islam Plus Baitul Maal!</p>
+
+    <div class="produk-container">
+      <div class="produk-card">
         <img src="corndog.jpg" alt="Big Boss">
         <h3>Big Boss</h3>
-        <p>Corndog jumbo isi sosis premium.</p>
-        <span class="price">Rp7.000</span>
+        <p class="harga">Rp7.000</p>
       </div>
-      <div class="card">
+      <div class="produk-card">
         <img src="corndog.jpg" alt="Small Boss">
         <h3>Small Boss</h3>
-        <p>Corndog kecil renyah cocok untuk ngemil.</p>
-        <span class="price">Rp4.000</span>
+        <p class="harga">Rp4.000</p>
       </div>
-      <div class="card">
+      <div class="produk-card">
         <img src="redpoison.jpg" alt="Red Poison">
         <h3>Red Poison</h3>
-        <p>Minuman bersoda merah rahasia Mafia Jawa.</p>
-        <span class="price">Rp4.000</span>
+        <p class="harga">Rp4.000</p>
       </div>
     </div>
   </section>
 
   <!-- Halaman Kasir -->
   <section id="kasir" class="page">
-    <h2>Kasir</h2>
-    <form id="kasirForm">
+    <h2>Kasir Mafia Jawa</h2>
+    <div id="kasir-content">
       <label>Pilih Produk:</label>
-      <select id="produk">
-        <option value="Big Boss">Big Boss - Rp7000</option>
-        <option value="Small Boss">Small Boss - Rp4000</option>
-        <option value="Red Poison">Red Poison - Rp4000</option>
+      <select id="produkSelect">
+        <option value="Big Boss">Big Boss - 7000</option>
+        <option value="Small Boss">Small Boss - 4000</option>
+        <option value="Red Poison">Red Poison - 4000</option>
       </select>
       <label>Jumlah:</label>
-      <input type="number" id="jumlah" min="1" value="1">
-      <button type="submit">Beli</button>
-    </form>
-    <div id="strukArea"></div>
+      <input type="number" id="jumlah" value="1" min="1">
+      <button onclick="tambahKeranjang()">Tambah ke Keranjang</button>
+
+      <h3>Keranjang</h3>
+      <ul id="keranjang"></ul>
+      <button onclick="checkout()">Checkout</button>
+
+      <h3>Struk</h3>
+      <pre id="struk"></pre>
+    </div>
   </section>
 
   <!-- Halaman Data Penjualan -->
   <section id="penjualan" class="page">
     <h2>Data Penjualan</h2>
-    <ul id="dataPenjualan"></ul>
-    <button onclick="hapusData()">Hapus Semua Data Penjualan</button>
+    <div id="penjualan-content">
+      <ul id="daftar-penjualan"></ul>
+      <p id="total-penjualan"></p>
+      <button onclick="hapusData()">Hapus Semua Data</button>
+    </div>
   </section>
 
   <script src="script.js"></script>
