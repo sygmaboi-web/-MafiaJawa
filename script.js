@@ -1,24 +1,16 @@
-let stok = {
-  "Big Boss": 20,
-  "Small Boss": 30,
-  "Red Poison": 25
-};
-
-let harga = {
-  "Big Boss": 7000,
-  "Small Boss": 4000,
-  "Red Poison": 4000
-};
-
+let currentPage = "home";
+let keranjang = [];
 let penjualan = [];
+let stok = { "Big Boss": 50, "Small Boss": 50, "Red Poison": 50 }; // stok awal
 
-function showPage(id) {
+function showPage(page) {
   document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
-  document.getElementById(id).classList.add('active');
+  document.getElementById(page).classList.add('active');
+  currentPage = page;
 }
 
-function passwordPrompt(page) {
-  let pass = prompt("Masukkan password untuk membuka halaman ini:");
+function authPage(page) {
+  let pass = prompt("Masukkan password:");
   if (pass === "KELOMPOK1KEREN") {
     showPage(page);
   } else {
@@ -26,59 +18,72 @@ function passwordPrompt(page) {
   }
 }
 
-// Kasir
-document.getElementById("kasirForm").addEventListener("submit", function(e) {
-  e.preventDefault();
-  let produk = document.getElementById("produk").value;
+function tambahKeranjang() {
+  let produk = document.getElementById("produkSelect").value;
   let jumlah = parseInt(document.getElementById("jumlah").value);
 
   if (stok[produk] < jumlah) {
-    alert("Stok " + produk + " tidak cukup!");
+    alert("Stok tidak cukup untuk " + produk);
     return;
   }
 
-  stok[produk] -= jumlah;
-  let total = harga[produk] * jumlah;
+  keranjang.push({ produk, jumlah });
+  updateKeranjang();
+}
 
-  let transaksi = {
-    produk: produk,
-    jumlah: jumlah,
-    total: total,
-    waktu: new Date().toLocaleString()
-  };
-  penjualan.push(transaksi);
-
-  // Tampilkan struk
-  let strukHTML = `
-    <div class="struk">
-      <h3>Struk Pembelian - Mafia Jawa</h3>
-      <p>Produk: ${produk}</p>
-      <p>Jumlah: ${jumlah}</p>
-      <p>Total: Rp${total}</p>
-      <p>Waktu: ${transaksi.waktu}</p>
-      <p>Terima kasih telah membeli di Mafia Jawa 🍴</p>
-    </div>
-  `;
-  document.getElementById("strukArea").innerHTML = strukHTML;
-
-  tampilkanDataPenjualan();
-});
-
-function tampilkanDataPenjualan() {
-  let list = document.getElementById("dataPenjualan");
+function updateKeranjang() {
+  let list = document.getElementById("keranjang");
   list.innerHTML = "";
-  penjualan.forEach((p, i) => {
+  keranjang.forEach((item, i) => {
     let li = document.createElement("li");
-    li.textContent = `${p.waktu} - ${p.produk} x${p.jumlah} = Rp${p.total}`;
+    li.textContent = `${item.produk} x${item.jumlah}`;
     list.appendChild(li);
   });
+}
+
+function checkout() {
+  if (keranjang.length === 0) {
+    alert("Keranjang masih kosong!");
+    return;
+  }
+
+  let total = 0;
+  let strukText = "=== STRUK MAFIA JAWA ===\n";
+  keranjang.forEach(item => {
+    let harga = item.produk === "Big Boss" ? 7000 : (item.produk === "Small Boss" ? 4000 : 4000);
+    let subtotal = harga * item.jumlah;
+    total += subtotal;
+    stok[item.produk] -= item.jumlah;
+    strukText += `${item.produk} x${item.jumlah} = Rp${subtotal}\n`;
+  });
+  strukText += `Total: Rp${total}\nTerima kasih!\n`;
+
+  document.getElementById("struk").textContent = strukText;
+  penjualan.push(strukText);
+  keranjang = [];
+  updateKeranjang();
+  updatePenjualan();
+}
+
+function updatePenjualan() {
+  let list = document.getElementById("daftar-penjualan");
+  list.innerHTML = "";
+  let total = 0;
+  penjualan.forEach(item => {
+    let li = document.createElement("li");
+    li.textContent = item.split("\n")[1]; // ambil baris pertama produk
+    list.appendChild(li);
+    let match = item.match(/Total: Rp(\d+)/);
+    if (match) total += parseInt(match[1]);
+  });
+  document.getElementById("total-penjualan").textContent = "Total Penjualan: Rp" + total;
 }
 
 function hapusData() {
   if (confirm("Yakin ingin menghapus semua data penjualan?")) {
     penjualan = [];
-    tampilkanDataPenjualan();
-    alert("Data penjualan berhasil dihapus!");
+    updatePenjualan();
+    alert("Data penjualan sudah dihapus!");
   }
 }
 
