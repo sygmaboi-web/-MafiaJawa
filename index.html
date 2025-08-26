@@ -3,68 +3,80 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Mafia Jawa - Ninefoosion</title>
+  <title>Mafia Jawa - Market Day</title>
   <link rel="stylesheet" href="style.css">
 </head>
 <body>
   <!-- Navbar -->
   <nav class="navbar">
-    <div class="logo">🌟 Mafia Jawa</div>
-    <ul class="menu">
-      <li><a href="#" onclick="showSection('home')">Home</a></li>
-      <li><a href="#" onclick="aksesKasir()">Mesin Kasir</a></li>
-      <li><a href="#" onclick="aksesPenjualan()">Hasil Penjualan</a></li>
+    <div class="logo">🍴 Mafia Jawa</div>
+    <ul class="nav-links">
+      <li><a href="#" onclick="showPage('home')">Home</a></li>
+      <li><a href="#" onclick="showPage('kasir')">Kasir</a></li>
+      <li><a href="#" onclick="showPage('penjualan')">Hasil Penjualan</a></li>
     </ul>
   </nav>
 
-  <!-- Halaman Utama -->
-  <section id="home" class="section active">
-    <h1>🍴 Mafia Jawa - Ninefoosion</h1>
-    <p>Stand resmi kelas 9 SMP Islam Plus Baitul Maal. Hadir dengan menu spesial!</p>
-
-    <div class="produk-container">
-      <!-- Corndog -->
-      <div class="card">
-        <img src="corndog.png" alt="Corndog">
-        <h2>Corndog</h2>
-        <p>Snack Korea dengan sosis dibalut adonan renyah & keju lumer.</p>
-        <ul class="harga">
-          <li>Kecil: Rp4.000</li>
-          <li>Besar: Rp7.000</li>
-        </ul>
+  <!-- Home -->
+  <section id="home" class="page active">
+    <h1>Selamat Datang di Mafia Jawa</h1>
+    <p>Produk spesial Market Day kelas 9 SMP Islam Plus Baitul Maal!</p>
+    <div class="product-grid">
+      <div class="product-card">
+        <img src="img/corndog.jpg" alt="Big Boss">
+        <h2>Big Boss</h2>
+        <p class="price">Rp7.000</p>
       </div>
-
-      <!-- Red Poison -->
-      <div class="card">
-        <img src="redpotion.png" alt="Red Poison">
+      <div class="product-card">
+        <img src="img/corndog.jpg" alt="Small Boss">
+        <h2>Small Boss</h2>
+        <p class="price">Rp4.000</p>
+      </div>
+      <div class="product-card">
+        <img src="img/redpoison.jpg" alt="Red Poison">
         <h2>Red Poison</h2>
-        <p>Minuman bersoda segar warna merah.<br><i>Racikan khas Mafia Jawa.</i></p>
-        <ul class="harga">
-          <li>Harga: Rp4.000</li>
-        </ul>
+        <p class="price">Rp4.000</p>
       </div>
+    </div>
+    <div class="extra">
+      <img src="img/student.png" alt="Student selling">
+      <p>Kami siswa SMP siap melayani dengan semangat Market Day! 🎉</p>
     </div>
   </section>
 
   <!-- Kasir -->
-  <section id="kasir" class="section">
-    <h2>💻 Mesin Kasir</h2>
-    <div id="kasirContent">
-      <p class="locked">🔒 Masukkan password untuk membuka mesin kasir</p>
-    </div>
+  <section id="kasir" class="page">
+    <h1>Kasir Mafia Jawa</h1>
+    <form id="kasirForm">
+      <label>Pilih Produk:</label>
+      <select id="produk">
+        <option value="Big Boss">Big Boss - 7000</option>
+        <option value="Small Boss">Small Boss - 4000</option>
+        <option value="Red Poison">Red Poison - 4000</option>
+      </select>
+      <label>Jumlah:</label>
+      <input type="number" id="jumlah" min="1" value="1">
+      <button type="submit">Tambah</button>
+    </form>
+
+    <div id="strukContainer"></div>
   </section>
 
-  <!-- Penjualan -->
-  <section id="penjualan" class="section">
-    <h2>📊 Hasil Penjualan</h2>
-    <div id="penjualanContent">
-      <p class="locked">🔒 Masukkan password untuk membuka hasil penjualan</p>
-    </div>
+  <!-- Hasil Penjualan -->
+  <section id="penjualan" class="page">
+    <h1>Hasil Penjualan</h1>
+    <table id="penjualanTable">
+      <thead>
+        <tr>
+          <th>Produk</th>
+          <th>Jumlah Terjual</th>
+          <th>Total</th>
+        </tr>
+      </thead>
+      <tbody></tbody>
+    </table>
+    <h2 id="grandTotal"></h2>
   </section>
-
-  <footer>
-    <p>© 2025 Mafia Jawa - Ninefoosion | Market Day</p>
-  </footer>
 
   <script src="script.js"></script>
 </body>
